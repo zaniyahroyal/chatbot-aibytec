@@ -193,7 +193,6 @@
 
 
 
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -309,12 +308,8 @@ if st.session_state['page'] == 'form':
         <style>
         /* Custom styling for Streamlit input fields */
         .stTextInput>div>div>input {
-            padding-top: 4px !important;
-            padding-bottom: 4px !important;
-        }
-        .stTextArea>div>textarea {
-            padding-top: 4px !important;
-            padding-bottom: 4px !important;
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -399,6 +394,7 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
+
 
 
 
