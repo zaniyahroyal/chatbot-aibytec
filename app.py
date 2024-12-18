@@ -106,7 +106,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.title("Student Profile Submission")
+    st.text("Hi! welcome to aibytec")
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
@@ -131,7 +131,7 @@ if st.session_state['page'] == 'form':
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    st.title("AIBYTEC'S Chatbot")
+    # st.title("AIBYTEC'S Chatbot")
 
     # Display chat history with background colors
     for entry in st.session_state['chat_history']:
