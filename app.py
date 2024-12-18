@@ -308,8 +308,8 @@ if st.session_state['page'] == 'form':
         <style>
         /* Custom styling for Streamlit input fields */
         .stTextInput>div>div>input {
-            padding-top: 2px !important;
-            padding-bottom: 2px !important;
+            padding-top: 1px !important;
+            padding-bottom: 1px !important;
         }
         </style>
     """, unsafe_allow_html=True)
