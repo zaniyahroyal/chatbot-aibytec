@@ -111,7 +111,7 @@ if st.session_state['page'] == 'form':
         name = st.text_input("Name")
         email = st.text_input("Email")
         contact_no = st.text_input("Contact No.")  # Replaced Field of Interest
-        area_of_interest = st.text_area("Area of Interest")  # Replaced Study Preferences
+        area_of_interest = st.text_input("Area of Interest")  # Replaced Study Preferences
         submitted = st.form_submit_button("Submit")
         
         if submitted:
