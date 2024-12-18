@@ -106,7 +106,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.subheader("Hi! welcome to AiByTec")
+    st.subheader("Hi! welcome to AIByTec")
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
