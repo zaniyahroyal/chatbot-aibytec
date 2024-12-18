@@ -192,7 +192,6 @@
 
 
 
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -301,24 +300,31 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.subheader("Hi! Welcome to AIByTec")
-
-    # Custom CSS for reducing padding in input fields
-    st.markdown("""
+    st.subheader("Hi! welcome to AIByTec")
+    
+    # Custom CSS to reduce input field height
+    st.markdown(
+        """
         <style>
-        /* Custom styling for Streamlit input fields */
-        .stTextInput>div>div>input {
-            padding-top: 1px !important;
-            padding-bottom: 1px !important;
-        }
+            .small-input input {
+                height: 25px;
+                font-size: 14px;
+            }
         </style>
-    """, unsafe_allow_html=True)
-
+        """, 
+        unsafe_allow_html=True
+    )
+    
     with st.form(key="user_form"):
-        name = st.text_input("Name")
-        email = st.text_input("Email")
-        contact_no = st.text_input("Contact No.")  
-        area_of_interest = st.text_input("Area of Interest")  
+        name = st.text_input("Name", key="name", help="Enter your full name", label_visibility="visible", 
+                             css_class="small-input")
+        email = st.text_input("Email", key="email", help="Enter your email address", label_visibility="visible", 
+                              css_class="small-input")
+        contact_no = st.text_input("Contact No.", key="contact_no", help="Enter your contact number", 
+                                   label_visibility="visible", css_class="small-input")
+        area_of_interest = st.text_input("Area of Interest", key="area_of_interest", help="Enter your area of interest", 
+                                         label_visibility="visible", css_class="small-input")
+        
         submitted = st.form_submit_button("Submit")
         
         if submitted:
@@ -338,8 +344,6 @@ if st.session_state['page'] == 'form':
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    # st.title("AIByTec's Chatbot")
-
     # Display chat history with background colors
     for entry in st.session_state['chat_history']:
         # User Message
@@ -394,10 +398,3 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
-
-
-
-
-
-
-
