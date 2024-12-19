@@ -829,10 +829,6 @@
 
 
 
-
-
-
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -937,12 +933,12 @@ st.markdown("""
     <style>
         .button-row {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-evenly;
             margin-top: 20px;
         }
         .button-row button {
-            # flex: 1;
-            margin: 2px;
+            flex: 1;
+            margin: 5px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -957,7 +953,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    # st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -1022,6 +1018,3 @@ elif st.session_state['page'] == 'chat':
 
         # Re-run to display updated chat history
         st.rerun()
-
-
-
