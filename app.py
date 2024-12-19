@@ -937,12 +937,12 @@ st.markdown("""
     <style>
         .button-row {
             display: flex;
-            justify-content: space-evenly;
+            justify-content: space-between;
             margin-top: 20px;
         }
         .button-row button {
-            flex: 1;
-            margin: 1px;
+            # flex: 1;
+            margin: 2px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -957,7 +957,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
+    # st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
