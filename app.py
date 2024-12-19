@@ -316,7 +316,7 @@ if st.session_state['page'] == 'form':
         
         with col3:
             st.write("")  # Empty to align button on the right
-            continue_chat = st.form_submit_button("skip to continue chat")
+            continue_chat = st.form_submit_button("skip")
         
         if submitted:
             if name and email and contact_no and area_of_interest:
