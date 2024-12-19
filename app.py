@@ -716,8 +716,8 @@ if st.session_state['page'] == 'form':
             unsafe_allow_html=True,
         )
 
-        submitted = st.form_submit_button("Submit")
-        continue_chat = st.form_submit_button("Continue Chat with AIByTec")
+        # submitted = st.form_submit_button("Submit")
+        # continue_chat = st.form_submit_button("Continue Chat with AIByTec")
         
         if submitted:
             if name and email and contact_no and area_of_interest:
