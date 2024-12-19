@@ -22,9 +22,10 @@ PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
 
 # ----------------------
-# Functions
+# Functions and Rest of the Script
 # ----------------------
 
+# Function to send email
 def send_email(name, email, contact_no, area_of_interest):
     subject = "New Student Profile Submission"
     body = f"""
@@ -46,10 +47,11 @@ def send_email(name, email, contact_no, area_of_interest):
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message.as_string())
         server.quit()
-        st.success("Profile submitted successfully!")
+        st.success("Email sent successfully!")
     except Exception as e:
         st.error(f"Error sending email: {e}")
 
+# Function to extract PDF text
 def extract_pdf_text(file_path):
     try:
         reader = PdfReader(file_path)
@@ -61,6 +63,7 @@ def extract_pdf_text(file_path):
         st.error(f"Error reading PDF: {e}")
         return ""
 
+# Function to scrape website content
 def scrape_website(url):
     try:
         response = requests.get(url)
@@ -69,6 +72,7 @@ def scrape_website(url):
     except Exception as e:
         return f"Error scraping website: {e}"
 
+# Function to generate OpenAI response
 def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     combined_context = f"Website Content:\n{website_text}\n\nPDF Content:\n{pdf_text}"
     messages = [{"role": "system", "content": "You are a helpful assistant. Use the provided content."}]
@@ -88,43 +92,31 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
         return f"Error generating response: {e}"
 
 # ----------------------
-# Streamlit UI
+# Streamlit UI and App Logic
 # ----------------------
 
-# Apply CSS for 70% width
-st.set_page_config(page_title="AIByTec Student Chatbot", layout="wide")
-st.markdown(
-    """
-    <style>
-    .main {
-        max-width: 70%;
-        margin: auto;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
 
-# Initialize session state
+# (The rest of your Streamlit logic remains unchanged)
+
+
+# Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
 
-# Page: Form Submission
+# ----------------------
+# PAGE 1: User Info Form
+# ----------------------
 if st.session_state['page'] == 'form':
-    st.subheader("Hi! Welcome to AIByTec")
-    # st.subheader("Submit Your Profile or Start Chatting Directly")
-
-    # Profile Form
-    st.markdown('<p style="font-size: 22px;"><b>Submit Your Profile</b></p>', unsafe_allow_html=True)
-    # st.markdown("### Submit Your Profile")
-    with st.form(key="profile_form"):
+    st.subheader("HI! Welcome to AIByTec")
+    with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
         contact_no = st.text_input("Contact No.")
         area_of_interest = st.text_input("Area of Interest")
-        submitted = st.form_submit_button("Submit Profile")
+        submitted = st.form_submit_button("Submit")
         if submitted:
             if name and email and contact_no and area_of_interest:
                 send_email(name, email, contact_no, area_of_interest)
@@ -133,31 +125,61 @@ if st.session_state['page'] == 'form':
             else:
                 st.warning("Please fill out all fields.")
 
-    # st.markdown("---")
-    st.markdown("### Skip the Form")
-    if st.button("Start Chat with AI Chatbot"):
-        st.session_state['page'] = 'chat'
-        st.rerun()
-
-# Page: Chatbot Interface
+# ----------------------
+# PAGE 2: Chatbot Interface
+# ----------------------
 elif st.session_state['page'] == 'chat':
-    st.title("AI Chatbot Interface")
+    # Display chat history without headings
+    for entry in st.session_state['chat_history']:
+        # User Message
+        st.markdown(
+            f"""
+            <div style="
+                background-color: #78bae4; 
+                padding: 10px; 
+                border-radius: 10px; 
+                margin-bottom: 10px;
+                width: fit-content;
+                max-width: 80%;
+            ">
+                {entry['user']}
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
 
-    # Display chat history
-    chat_container = st.container()
-    with chat_container:
-        for entry in st.session_state['chat_history']:
-            st.markdown(f"**You:** {entry['user']}")
-            st.markdown(f"**AI:** {entry['bot']}")
+        # Assistant Message
+        st.markdown(
+            f"""
+            <div style="
+                background-color:  #D3D3D3; 
+                padding: 10px; 
+                border-radius: 10px; 
+                margin-bottom: 10px;
+                margin-left: auto;
+                width: fit-content;
+                max-width: 80%;
+            ">
+                {entry['bot']}
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
 
-    # Load website and PDF content
+    # Load PDF and Website content once
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
     website_text = scrape_website(WEBSITE_URL)
 
-    # Input bar for chatbot
-    user_input = st.text_input("Ask a question", key="user_input_chat")
+    # Fixed input bar at bottom
+    user_input = st.chat_input("Type your question here...", key="user_input_fixed")
+
     if user_input:
-        with st.spinner("AI is responding..."):
+        # Display bot's response
+        with st.spinner("Generating response..."):
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
+        
+        # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
+        
+        # Re-run to display updated chat history
         st.rerun()
