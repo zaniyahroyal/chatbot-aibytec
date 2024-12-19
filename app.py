@@ -699,7 +699,7 @@ if st.session_state['page'] == 'form':
                     <button class="st-button primary" type="submit" name="submit">Submit</button>
                 </div>
                 <div>
-                    <button class="st-button secondary" type="submit" name="continue_chat">Continue Chat with AIByTec</button>
+                    <button class="st-button secondary" type="submit" name="continue_chat">Skip</button>
                 </div>
             </div>
             """,
