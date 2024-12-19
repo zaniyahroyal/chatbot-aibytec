@@ -303,7 +303,7 @@ if st.session_state['page'] == 'form':
         area_of_interest = st.text_input("Area of Interest")
 
         # Create two columns for buttons
-        col1, col2 = st.columns([1, 1])    # equal width for both columns
+        col1, col2 = st.columns([1, 3])    # equal width for both columns
 
         with col1:
             submitted = st.form_submit_button("Submit")
