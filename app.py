@@ -735,7 +735,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
+    # st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
     
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -743,14 +743,13 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")
         area_of_interest = st.text_input("Area of Interest")
         
-        # Custom button row for alignment
-        col1, col2 = st.columns([1, 2])
+        # Create two buttons in the same row
+        col1, col2 = st.columns(2)
         
         with col1:
             submit_button = st.form_submit_button("Submit")
         with col2:
-            # continue_chat_button = st.form_submit_button("Continue Chat with AIByTec")
-            continue_chat_button = st.form_submit_button("Skip")
+            continue_chat_button = st.form_submit_button("Skip") 
         
         if submit_button:
             if name and email and contact_no and area_of_interest:
@@ -803,6 +802,7 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
+
 
 
 
