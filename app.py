@@ -749,7 +749,8 @@ if st.session_state['page'] == 'form':
         with col1:
             submit_button = st.form_submit_button("Submit")
         with col2:
-            continue_chat_button = st.form_submit_button("Continue Chat with AIByTec")
+            # continue_chat_button = st.form_submit_button("Continue Chat with AIByTec")
+            continue_chat_button = st.form_submit_button("Skip")
         
         if submit_button:
             if name and email and contact_no and area_of_interest:
