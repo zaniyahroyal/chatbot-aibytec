@@ -325,9 +325,9 @@ if st.session_state['page'] == 'form':
         # Create two columns for buttons
         col1, col2 = st.columns(2)
         with col1:
-            submitted = st.form_submit_button("Continue chat")
+            submitted = st.form_submit_button("Continue the Conversation")
         with col2:
-            continue_chat = st.form_submit_button("Skip to continue chat")
+            continue_chat = st.form_submit_button("Skip to Conversation")
         
         if submitted:
             if name and email and contact_no and area_of_interest:
