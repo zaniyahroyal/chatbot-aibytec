@@ -407,7 +407,6 @@
 
 
 
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -535,14 +534,15 @@ if st.session_state['page'] == 'form':
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-   
+    # st.title("AI Chatbot Interface")
+
     # Display chat history with background colors
     for entry in st.session_state['chat_history']:
         # User Message
         st.markdown(
             f"""
             <div style="
-                background-color:#78bae4; 
+                background-color: #e6f7ff; 
                 padding: 10px; 
                 border-radius: 10px; 
                 margin-bottom: 10px;
@@ -559,7 +559,7 @@ elif st.session_state['page'] == 'chat':
         st.markdown(
             f"""
             <div style="
-                background-color: #D3D3D3; 
+                background-color: #f0f0f0; 
                 padding: 10px; 
                 border-radius: 10px; 
                 margin-bottom: 10px;
@@ -589,7 +589,8 @@ elif st.session_state['page'] == 'chat':
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         
         # Re-run to display updated chat history
-        st.rerun()  
+        st.rerun()
+
 
 
 
