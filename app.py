@@ -942,7 +942,7 @@ st.markdown("""
         }
         .button-row button {
             flex: 1;
-            margin: 5px;
+            margin: 1px;
         }
     </style>
 """, unsafe_allow_html=True)
