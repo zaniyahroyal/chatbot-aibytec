@@ -607,18 +607,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -728,7 +716,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
+    # st.markdown('<p style="font-size: 21px;"><b>Hi! Welcome to AIByTec</b></p>', unsafe_allow_html=True)
     
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -736,12 +724,31 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")
         area_of_interest = st.text_input("Area of Interest")
         
-        # Layout for buttons in a single row
-        col1, col2 = st.columns(2)
-        with col1:
-            submitted = st.form_submit_button("Submit")
-        with col2:
-            continue_chat = st.form_submit_button("Skip")
+        # Use custom HTML/CSS for button alignment
+        st.markdown(
+            """
+            <style>
+            .button-container {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .button-container button {
+                flex: 1;
+                margin: 0;
+            }
+            </style>
+            <div class="button-container">
+                <button type="submit" name="submit" class="st-button">Submit</button>
+                <button type="submit" name="continue_chat" class="st-button">Continue Chat with AIByTec</button>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        
+        # Button functionality
+        submitted = st.form_submit_button("Submit")
+        continue_chat = st.form_submit_button("Skip")
         
         if submitted:
             if name and email and contact_no and area_of_interest:
@@ -813,4 +820,14 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
+
+
+
+
+
+
+
+
+
+
 
