@@ -185,8 +185,6 @@
 #         st.rerun()
 
 
-
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -304,19 +302,14 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")
         area_of_interest = st.text_input("Area of Interest")
 
-        # Create three columns for buttons: Submit (left), empty center, Continue Chat (right)
-        col1, col2, col3 = st.columns([1, 1, 1])  # The middle column is wider
+        # Create two columns for buttons
+        col1, col2 = st.columns([3, 1])    # equal width for both columns
 
         with col1:
-            st.write("")  # Empty to align button on the left
             submitted = st.form_submit_button("Submit")
         
         with col2:
-            pass  # Empty column to take up space
-        
-        with col3:
-            st.write("")  # Empty to align button on the right
-            continue_chat = st.form_submit_button("skip")
+            continue_chat = st.form_submit_button("Skip")
         
         if submitted:
             if name and email and contact_no and area_of_interest:
@@ -389,4 +382,3 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
-
