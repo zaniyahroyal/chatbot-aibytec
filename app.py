@@ -110,8 +110,7 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    # st.subheader("Hi! Welcome to AIByTec")
-        st.markdown('<p style="font-size: 24px;">HI! Welcome to AIByTec</p>', unsafe_allow_html=True)
+    st.subheader("Hi! Welcome to AIByTec")
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
