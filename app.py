@@ -407,7 +407,10 @@
 
 
 
+Share
 
+Z
+You said:
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -516,20 +519,13 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    st.title("Student Profile Submission")
+    st.subheader("Hi! Welcome to AIByTec")
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
-        contact_no = st.text_input("Contact No.")
-        area_of_interest = st.text_area("Area of Interest")
-        
-        # Two buttons: Submit and Skip/Continue
-        col1, col2 = st.columns(2)
-        with col1:
-            submitted = st.form_submit_button("Submit")
-        with col2:
-            skipped = st.form_submit_button("Skip/Continue")
-
+        contact_no = st.text_input("Contact No.")  # Replaced Field of Interest
+        area_of_interest = st.text_area("Area of Interest")  # Replaced Study Preferences
+        submitted = st.form_submit_button("Submit")
         if submitted:
             if name and email and contact_no and area_of_interest:
                 send_email(name, email, contact_no, area_of_interest)
@@ -538,23 +534,18 @@ if st.session_state['page'] == 'form':
             else:
                 st.warning("Please fill out all fields.")
 
-        if skipped:
-            st.session_state['page'] = 'chat'
-            st.rerun()
-
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    st.title("AI Chatbot Interface")
-
+   
     # Display chat history with background colors
     for entry in st.session_state['chat_history']:
         # User Message
         st.markdown(
             f"""
             <div style="
-                background-color: #e6f7ff; 
+                background-color:#78bae4; 
                 padding: 10px; 
                 border-radius: 10px; 
                 margin-bottom: 10px;
@@ -571,7 +562,7 @@ elif st.session_state['page'] == 'chat':
         st.markdown(
             f"""
             <div style="
-                background-color: #f0f0f0; 
+                background-color: #D3D3D3; 
                 padding: 10px; 
                 border-radius: 10px; 
                 margin-bottom: 10px;
@@ -590,7 +581,7 @@ elif st.session_state['page'] == 'chat':
     website_text = scrape_website(WEBSITE_URL)
 
     # Fixed input bar at bottom
-    user_input = st.chat_input("Type your question here...")
+    user_input = st.chat_input("Type your question here...", key="user_input_fixed")
 
     if user_input:
         # Display bot's response
@@ -601,8 +592,7 @@ elif st.session_state['page'] == 'chat':
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         
         # Re-run to display updated chat history
-        st.rerun()
-
+        st.rerun()  
 
 
 
