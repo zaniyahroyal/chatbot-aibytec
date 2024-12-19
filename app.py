@@ -744,7 +744,7 @@ if st.session_state['page'] == 'form':
         area_of_interest = st.text_input("Area of Interest")
         
         # Custom button row for alignment
-        col1, col2 = st.columns([1, 1])
+        col1, col2 = st.columns([1, 2])
         
         with col1:
             submit_button = st.form_submit_button("Submit")
