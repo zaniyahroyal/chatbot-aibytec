@@ -27,7 +27,7 @@ WEBSITE_URL = os.getenv("WEBSITE_URL")
 
 # Function to send email
 def send_email(name, email, contact_no, area_of_interest):
-    subject = "New Student Profile Submission"
+    subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
 
