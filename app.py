@@ -709,6 +709,22 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 
 st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
 
+# Add custom CSS for buttons to appear side-by-side
+st.markdown("""
+    <style>
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .button-row button {
+            flex: 1;
+            min-width: 120px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
@@ -727,33 +743,15 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")
         area_of_interest = st.text_input("Area of Interest")
         
-        # Use custom HTML/CSS for button alignment
-        st.markdown(
-            """
-            <style>
-            .button-container {
-                display: flex;
-                justify-content: space-between;
-                gap: 10px;
-            }
-            .button-container button {
-                flex: 1;
-                margin: 0;
-            }
-            </style>
-            <div class="button-container">
-                <button type="submit" name="submit" class="st-button">Submit</button>
-                <button type="submit" name="continue_chat" class="st-button">Continue Chat with AIByTec</button>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        # Custom button row for alignment
+        col1, col2 = st.columns([1, 1])
         
-        # Button functionality
-        submitted = st.form_submit_button("Submit")
-        continue_chat = st.form_submit_button("Continue Chat with AIByTec")
+        with col1:
+            submit_button = st.form_submit_button("Submit")
+        with col2:
+            continue_chat_button = st.form_submit_button("Continue Chat with AIByTec")
         
-        if submitted:
+        if submit_button:
             if name and email and contact_no and area_of_interest:
                 send_email(name, email, contact_no, area_of_interest)
                 st.session_state['page'] = 'chat'
@@ -761,7 +759,7 @@ if st.session_state['page'] == 'form':
             else:
                 st.warning("Please fill out all fields.")
         
-        if continue_chat:
+        if continue_chat_button:
             st.session_state['page'] = 'chat'
             st.rerun()
 
@@ -769,42 +767,23 @@ if st.session_state['page'] == 'form':
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    # Display chat history without headings
+    # Display chat history
     for entry in st.session_state['chat_history']:
         # User Message
         st.markdown(
             f"""
-            <div style="
-                background-color: #78bae4; 
-                padding: 10px; 
-                border-radius: 10px; 
-                margin-bottom: 10px;
-                width: fit-content;
-                max-width: 80%;
-            ">
+            <div style="background-color: #78bae4; padding: 10px; border-radius: 10px; margin-bottom: 10px; width: fit-content; max-width: 80%;">
                 {entry['user']}
             </div>
-            """, 
-            unsafe_allow_html=True
-        )
+            """, unsafe_allow_html=True)
 
         # Assistant Message
         st.markdown(
             f"""
-            <div style="
-                background-color:  #D3D3D3; 
-                padding: 10px; 
-                border-radius: 10px; 
-                margin-bottom: 10px;
-                margin-left: auto;
-                width: fit-content;
-                max-width: 80%;
-            ">
+            <div style="background-color:  #D3D3D3; padding: 10px; border-radius: 10px; margin-bottom: 10px; margin-left: auto; width: fit-content; max-width: 80%;">
                 {entry['bot']}
             </div>
-            """, 
-            unsafe_allow_html=True
-        )
+            """, unsafe_allow_html=True)
 
     # Load PDF and Website content once
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
@@ -823,5 +802,6 @@ elif st.session_state['page'] == 'chat':
         
         # Re-run to display updated chat history
         st.rerun()
+
 
 
