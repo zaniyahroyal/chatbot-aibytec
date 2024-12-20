@@ -360,6 +360,7 @@ elif st.session_state['page'] == 'chat':
                 margin-bottom: 10px;
                 width: fit-content;
                 max-width: 80%;
+                overflow: hidden;
             ">
                 {entry['user']}
             </div>
@@ -378,6 +379,7 @@ elif st.session_state['page'] == 'chat':
                 margin-left: auto;
                 width: fit-content;
                 max-width: 80%;
+                overflow: hidden;
             ">
                 {entry['bot']}
             </div>
