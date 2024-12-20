@@ -293,6 +293,8 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=messages,
+            max_tokens=256,
+            temperature=0.7,
             stream=False
         )
         return response['choices'][0]['message']['content']
