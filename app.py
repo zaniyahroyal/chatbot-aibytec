@@ -105,15 +105,13 @@ if st.session_state['page'] == 'home':
     st.title("Welcome to AIByTec Bot")
     st.write("Please choose an option:")
 
-    # Create buttons for the two options
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        if st.button("Fill the Form", key="form_button"):
-            st.session_state['page'] = 'form'
+    # Use radio buttons for form and chatbot selection
+    choice = st.radio("Choose your action", ("Fill the Form", "Chat with AIByTec Bot"))
 
-    with col2:
-        if st.button("Chat with AIByTec Bot", key="chat_button"):
-            st.session_state['page'] = 'chat'
+    if choice == "Fill the Form":
+        st.session_state['page'] = 'form'
+    elif choice == "Chat with AIByTec Bot":
+        st.session_state['page'] = 'chat'
 
 # ----------------------
 # PAGE 2: User Info Form
@@ -137,7 +135,7 @@ elif st.session_state['page'] == 'form':
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'  # Switch to the chat page after form submission
-                # No notifications are shown after form submission
+                st.experimental_rerun()  # Ensure the page is refreshed
             else:
                 st.warning("Please fill out all fields.")
 
