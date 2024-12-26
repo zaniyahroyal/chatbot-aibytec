@@ -18,27 +18,6 @@ RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
-# Apply custom CSS for buttons
-st.markdown(
-    """
-    <style>
-    button {
-        background-color: #439DF6 !important; /* Set button background color */
-        color: white !important; /* Set button text color */
-        border: none !important; /* Remove border */
-        border-radius: 5px !important; /* Rounded corners */
-        font-size: 16px !important; /* Adjust font size */
-        padding: 10px 20px !important; /* Adjust padding */
-        cursor: pointer !important; /* Add pointer cursor */
-        text-align: center !important;
-    }
-    button:hover {
-        opacity: 0.9 !important; /* Add hover effect */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 # Functions
 
