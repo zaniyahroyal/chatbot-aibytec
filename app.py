@@ -42,6 +42,7 @@ def send_email(name, email, contact_no, specific_needs_and_challenges):
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message.as_string())
         server.quit()
+        st.success("Email sent successfully!")
     except Exception as e:
         st.error(f"Error sending email: {e}")
 
@@ -94,32 +95,20 @@ st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
 
 # Session State Initialization
 if "page" not in st.session_state:
-    st.session_state['page'] = 'home'
+    st.session_state['page'] = 'form'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
 
 # ----------------------
-# PAGE 1: Home Page with Options
+# PAGE 1: User Info Form
 # ----------------------
-if st.session_state['page'] == 'home':
-    st.title("Welcome to AIByTec Bot")
-    st.write("Please choose an option:")
-
-    # Create buttons for the two options
-    col1, col2 = st.columns([1, 1])
+if st.session_state['page'] == 'form':
+    # Create buttons at the top for form and chat
+    col1, col2 = st.columns([1, 3])
     with col1:
-        if st.button("Fill the Form"):
-            st.session_state['page'] = 'form'  # Navigate to the form page
-
+        st.button("Complete Your Profile", key="profile_button")
     with col2:
-        if st.button("Chat with AIByTec Bot"):
-            st.session_state['page'] = 'chat'  # Navigate to the chatbot page
-
-# ----------------------
-# PAGE 2: User Info Form
-# ----------------------
-elif st.session_state['page'] == 'form':
-    st.header("Complete Your Profile")
+        st.button("AIByTec Bot", key="chat_button")
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -136,28 +125,38 @@ elif st.session_state['page'] == 'form':
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
-                st.session_state['page'] = 'chat'  # After submission, navigate to chatbot
-                st.session_state['chat_history'].clear()  # Clear chat history
-                st.session_state['chat_history'].append({
-                    "user": "", 
-                    "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
-                })
-                st.experimental_rerun()  # Trigger the rerun to load the chatbot page
+                st.session_state['page'] = 'chat'
+                st.success("Your profile has been submitted!")
+                st.rerun()
             else:
                 st.warning("Please fill out all fields.")
-
+                
 # ----------------------
-# PAGE 3: Chatbot Interface
+# PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    st.header("Chat with AIByTec Bot")
-
+    # Initialize chat history with a greeting from the bot
+    if not st.session_state['chat_history']:
+        st.session_state['chat_history'].append({
+            "user": "", 
+            "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
+        })
+    
     # Display chat history
     for entry in st.session_state['chat_history']:
         if entry['user']:  # Show user messages
             st.markdown(
                 f"""
-                <div style="background-color: #439DF6; padding: 10px; color: #fff; border-radius: 10px; margin-bottom: 10px; width: fit-content; max-width: 80%; overflow: hidden;">
+                <div style="
+                    background-color: #439DF6; 
+                    padding: 10px;
+                    color: #fff;
+                    border-radius: 10px; 
+                    margin-bottom: 10px;
+                    width: fit-content;
+                    max-width: 80%;
+                    overflow: hidden;
+                ">
                     {entry['user']}
                 </div>
                 """, 
@@ -166,7 +165,17 @@ elif st.session_state['page'] == 'chat':
         if entry['bot']:  # Show bot messages
             st.markdown(
                 f"""
-                <div style="background-color: #4a4a4a; padding: 10px; color: #fff; border-radius: 10px; margin-bottom: 10px; margin-left: auto; width: fit-content; max-width: 80%; overflow: hidden;">
+                <div style="
+                    background-color: #4a4a4a; 
+                    padding: 10px; 
+                    color: #fff; 
+                    border-radius: 10px; 
+                    margin-bottom: 10px;
+                    margin-left: auto;
+                    width: fit-content;
+                    max-width: 80%;
+                    overflow: hidden;
+                ">
                     {entry['bot']}
                 </div>
                 """, 
@@ -180,15 +189,10 @@ elif st.session_state['page'] == 'chat':
     # Fixed input bar at bottom
     user_input = st.chat_input("Type your question here...", key="user_input_fixed")
     if user_input:
-        # Append user query to chat history
-        st.session_state['chat_history'].append({"user": user_input, "bot": ""})
-
         # Display bot's response
         with st.spinner("Generating response..."):
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-        
-        # Append bot response to chat history separately
-        st.session_state['chat_history'].append({"user": "", "bot": bot_response})
-
-        # Directly update chat interface by changing page state
-        st.session_state['page'] = 'chat'
+        # Append user query and bot response to chat history
+        st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
+        # Re-run to display updated chat history
+        st.rerun()
