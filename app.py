@@ -90,7 +90,7 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 # ----------------------
 # Streamlit UI and App Logic
 # ----------------------
-st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
+st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
@@ -105,7 +105,10 @@ if st.session_state['page'] == 'form':
         name = st.text_input("Name")
         email = st.text_input("Email")
         contact_no = st.text_input("Contact No.")
-        area_of_interest = st.text_input("Area of Interest")
+        specific needs and challenges = st.text_input("task to be performed")
+        training = st.text_input("preferred course")
+        mode of training = st.text_input("online/onsite")
+        prefered time nd mode of contact = st.text_input("time/mode")
         
         # Create two columns for buttons
         col1, col2 = st.columns(2)
