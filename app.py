@@ -22,14 +22,14 @@ WEBSITE_URL = os.getenv("WEBSITE_URL")
 # Functions
 
 # Function to send email
-def send_email(name, email, contact_no, specific_needs_and_challenges):
+def send_email(name, email, contact_no, area_of_interest):
     subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
     Name: {name}
     Email: {email}
     Contact No.: {contact_no}
-    Specific Needs & Challenges: {specific_needs_and_challenges}
+    Area of Interest: {area_of_interest}
     """
     message = MIMEMultipart()
     message['From'] = SENDER_EMAIL
@@ -92,7 +92,6 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 # Streamlit UI and App Logic
 # ----------------------
 st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
-
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
@@ -103,34 +102,48 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
-    # Create buttons at the top for form and chat
+    # Create columns to arrange the buttons at the top of the page
     col1, col2 = st.columns([1, 3])
+
+    # Button for the form
     with col1:
         st.button("Complete Your Profile", key="profile_button")
+
+    # Button to proceed to AI chatbot
     with col2:
-        st.button("AIByTec Bot", key="chat_button")
+        # Button for the AIByTec Bot with updated styling
+        st.button("AIByTec Bot", key="chat_button", help="Click here to chat with our AI assistant",
+                  on_click=lambda: st.session_state.update({'page': 'chat'}))  # Direct action on click
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
-        contact_no = st.text_input("Contact No.")    
-        specific_needs_and_challenges = st.text_input("Task to be performed")
+        contact_no = st.text_input("Contact No.")
+        specific_needs_&_challenges = st.text_input("Task to be performed")
         training = st.text_input("Preferred course")
-        mode_of_training = st.text_input("Online/Onsite")
-        prefered_time_contact_mode = st.text_input("Preferred time/mode of contact")
+        mode_of_training = st.selectbox("Mode of training", ["Online", "Onsite"])
+        preferred_time_contact_mode = st.selectbox("Preferred Time/Contact Mode", ["Email", "WhatsApp"])
 
-        # Submit Button for the form
-        submitted = st.form_submit_button("Submit Profile")
-        
+        # Create two columns for buttons
+        col1, col2 = st.columns(2)
+        with col1:
+            submitted = st.form_submit_button("Complete Your Profile")
+        with col2:
+            continue_chat = st.form_submit_button("Skip and Join AIByTec Chat")
+
         if submitted:
-            if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
-                send_email(name, email, contact_no, specific_needs_and_challenges)
+            if name and email and contact_no and specific_needs_&_challenges:
+                send_email(name, email, contact_no, specific_needs_&_challenges)
                 st.session_state['page'] = 'chat'
-                st.success("Your profile has been submitted!")
                 st.rerun()
             else:
                 st.warning("Please fill out all fields.")
-                
+
+        # If user clicks "Continue Chat with AIByTec"
+        if continue_chat:
+            st.session_state['page'] = 'chat'
+            st.rerun()
+
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
@@ -141,7 +154,7 @@ elif st.session_state['page'] == 'chat':
             "user": "", 
             "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
         })
-    
+
     # Display chat history
     for entry in st.session_state['chat_history']:
         if entry['user']:  # Show user messages
@@ -181,7 +194,7 @@ elif st.session_state['page'] == 'chat':
                 """, 
                 unsafe_allow_html=True
             )
-    
+
     # Load PDF and Website content once
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
     website_text = scrape_website(WEBSITE_URL)
