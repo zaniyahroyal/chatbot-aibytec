@@ -104,12 +104,7 @@ if st.session_state['page'] == 'form':
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
-        contact_no = st.text_input("Contact No.")
-        specific_needs_&_challenges = st.text_input("task to be performed")
-        training = st.text_input("preferred course")
-        mode_of_training = st.text_input("online/onsite")
-        prefered_time/contact_mode = st.text_input("time/mode")
-        
+        contact_no = st.text_input("Contact No.")    
         # Create two columns for buttons
         col1, col2 = st.columns(2)
         with col1:
