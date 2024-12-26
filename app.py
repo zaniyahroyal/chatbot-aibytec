@@ -108,11 +108,11 @@ if st.session_state['page'] == 'home':
     # Create buttons for the two options
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("Fill the Form"):
+        if st.button("Fill the Form", key="form_button"):
             st.session_state['page'] = 'form'
 
     with col2:
-        if st.button("Chat with AIByTec Bot"):
+        if st.button("Chat with AIByTec Bot", key="chat_button"):
             st.session_state['page'] = 'chat'
 
 # ----------------------
@@ -136,7 +136,7 @@ elif st.session_state['page'] == 'form':
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
-                st.session_state['page'] = 'chat'
+                st.session_state['page'] = 'chat'  # Switch to the chat page after form submission
                 # No notifications are shown after form submission
             else:
                 st.warning("Please fill out all fields.")
