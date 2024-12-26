@@ -105,13 +105,15 @@ if st.session_state['page'] == 'home':
     st.title("Welcome to AIByTec Bot")
     st.write("Please choose an option:")
 
-    # Use radio buttons for form and chatbot selection
-    choice = st.radio("Choose your action", ("Fill the Form", "Chat with AIByTec Bot"))
+    # Create buttons for the two options
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("Fill the Form"):
+            st.session_state['page'] = 'form'  # Navigate to the form page
 
-    if choice == "Fill the Form":
-        st.session_state['page'] = 'form'
-    elif choice == "Chat with AIByTec Bot":
-        st.session_state['page'] = 'chat'
+    with col2:
+        if st.button("Chat with AIByTec Bot"):
+            st.session_state['page'] = 'chat'  # Navigate to the chatbot page
 
 # ----------------------
 # PAGE 2: User Info Form
@@ -134,8 +136,8 @@ elif st.session_state['page'] == 'form':
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
-                st.session_state['page'] = 'chat'  # Switch to the chat page after form submission
-                st.experimental_rerun()  # Ensure the page is refreshed
+                st.session_state['page'] = 'chat'  # After submission, navigate to chatbot
+                st.experimental_rerun()  # Trigger the rerun to load the chatbot page
             else:
                 st.warning("Please fill out all fields.")
 
@@ -185,3 +187,4 @@ elif st.session_state['page'] == 'chat':
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
+        st.experimental_rerun()  # Re-run to update chat history
