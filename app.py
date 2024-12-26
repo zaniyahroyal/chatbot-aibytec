@@ -70,13 +70,42 @@ def scrape_website(url):
     except Exception as e:
         return f"Error scraping website: {e}"
 
-# Function to generate OpenAI response
+# # Function to generate OpenAI response
+# def chat_with_ai(user_question, website_text, pdf_text, chat_history):
+#     combined_context = f"Website Content:\n{website_text}\n\nPDF Content:\n{pdf_text}"
+#     messages = [{"role": "system", "content": "You are a helpful assistant. Use the provided content."}]
+#     for entry in chat_history:
+#         messages.append({"role": "user", "content": entry['user']})
+#         messages.append({"role": "assistant", "content": entry['bot']})
+#     messages.append({"role": "user", "content": f"{combined_context}\n\nQuestion: {user_question}"})
+
+#     try:
+#         response = openai.ChatCompletion.create(
+#             model="gpt-3.5-turbo",
+#             messages=messages,
+#             max_tokens=256,
+#             temperature=0.7,
+#             stream=False
+#         )
+#         return response['choices'][0]['message']['content']
+#     except Exception as e:
+
+
+
 def chat_with_ai(user_question, website_text, pdf_text, chat_history):
+    # Simple check for common greetings
+    greetings = ["hi", "hello", "hey", "hi there", "hello there"]
+    if user_question.lower() in greetings:
+        return "Hello! How can I assist you today?"
+
+    # If it's a regular question, combine website and PDF content for context
     combined_context = f"Website Content:\n{website_text}\n\nPDF Content:\n{pdf_text}"
     messages = [{"role": "system", "content": "You are a helpful assistant. Use the provided content."}]
+    
     for entry in chat_history:
         messages.append({"role": "user", "content": entry['user']})
         messages.append({"role": "assistant", "content": entry['bot']})
+
     messages.append({"role": "user", "content": f"{combined_context}\n\nQuestion: {user_question}"})
 
     try:
