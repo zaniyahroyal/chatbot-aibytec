@@ -134,11 +134,27 @@ if "chat_history" not in st.session_state:
 # ----------------------
 # PAGE 1: Home Page with Options
 # ----------------------
-if st.session_state['page'] == 'home':
-    # st.title("Welcome to AIByTec Bot")
-    st.subheader("Welcome to AIByTec Bot")
-    st.write("Please choose an option:")
+# if st.session_state['page'] == 'home':
+#     # st.title("Welcome to AIByTec Bot")
+#     st.subheader("Welcome to AIByTec Bot")
+#     st.write("Please choose an option:")
 
+#     # Create buttons for the two options
+#     col1, col2 = st.columns([1, 1])
+#     with col1:
+#         if st.button("Fill the Form"):
+#             st.session_state['page'] = 'form'
+
+#     with col2:
+#         if st.button("Chat with AIByTec Bot"):
+#             st.session_state['page'] = 'chat'
+
+
+if st.session_state['page'] == 'home':
+    st.subheader("Welcome to AIByTec Bot")
+    st.write("AIByTec Bot is your go-to assistant for enhancing your learning and business strategies. Explore our features by selecting an option below.")
+    st.write("Choose to either fill out your profile or start chatting with our AI-powered bot.")
+    
     # Create buttons for the two options
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -148,6 +164,8 @@ if st.session_state['page'] == 'home':
     with col2:
         if st.button("Chat with AIByTec Bot"):
             st.session_state['page'] = 'chat'
+
+
 
 # ----------------------
 # PAGE 2: User Info Form
