@@ -139,15 +139,7 @@ if "chat_history" not in st.session_state:
 #     st.subheader("Welcome to AIByTec Bot")
 #     st.write("Please choose an option:")
 
-#     # Create buttons for the two options
-#     col1, col2 = st.columns([1, 1])
-#     with col1:
-#         if st.button("Fill the Form"):
-#             st.session_state['page'] = 'form'
 
-#     with col2:
-#         if st.button("Chat with AIByTec Bot"):
-#             st.session_state['page'] = 'chat'
 
 
 if st.session_state['page'] == 'home':
@@ -159,60 +151,16 @@ if st.session_state['page'] == 'home':
         """
     )
     st.write("Please choose an option:")
+ # Create buttons for the two options
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("Fill the Form"):
+            st.session_state['page'] = 'form'
+
+    with col2:
+        if st.button("Chat with AIByTec Bot"):
+            st.session_state['page'] = 'chat'
     
-  # Create buttons with background colors
-col1, col2 = st.columns([1, 1])
-
-# Add custom CSS for buttons
-st.markdown(
-    """
-    <style>
-    .button-style {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 10px auto;
-        font-size: 16px;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 5px;
-        cursor: pointer;
-        width: 100%; /* Ensure it spans the column width */
-    }
-    .button-fill-form {
-        background-color: #4CAF50; /* Green */
-    }
-    .button-chat-bot {
-        background-color: #2196F3; /* Blue */
-    }
-    .button-style:hover {
-        opacity: 0.9; /* Add hover effect */
-    }
-    </style>
-    """, 
-    unsafe_allow_html=True
-)
-
-# Use HTML for styled buttons
-with col1:
-    if st.markdown(
-        """
-        <a href="#" class="button-style button-fill-form">Fill the Form</a>
-        """, 
-        unsafe_allow_html=True
-    ):
-        st.session_state['page'] = 'form'
-
-with col2:
-    if st.markdown(
-        """
-        <a href="#" class="button-style button-chat-bot">Chat with AIByTec Bot</a>
-        """, 
-        unsafe_allow_html=True
-    ):
-        st.session_state['page'] = 'chat'
-
-
 
 
 # ----------------------
