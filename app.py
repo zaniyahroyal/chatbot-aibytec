@@ -360,7 +360,7 @@ elif st.session_state['page'] == 'chat':
                 border-radius: 10px; 
                 margin-bottom: 10px;
                 width: fit-content;
-                max-width: 80%;
+                max-width: 50%;
                 overflow: hidden;
             ">
                 {entry['user']}
@@ -380,7 +380,7 @@ elif st.session_state['page'] == 'chat':
                 margin-bottom: 10px;
                 margin-left: auto;
                 width: fit-content;
-                max-width: 80%;
+                max-width: 50%;
                 overflow: hidden;
             ">
                 {entry['bot']}
