@@ -136,15 +136,7 @@ if "chat_history" not in st.session_state:
 # ----------------------
 if st.session_state['page'] == 'home':
     # st.title("Welcome to AIByTec Bot")
-    st.markdown(
-    """
-    # <h1 style='font-size:30px; text-align: center; color: #4CAF50;'>
-    <h1 style='font-size:35px;'>
-        Welcome to AIByTec Bot
-    </h1>
-    """,
-    unsafe_allow_html=True
-)
+    st.subheader("Welcome to AIByTec Bot")
     st.write("Please choose an option:")
 
     # Create buttons for the two options
