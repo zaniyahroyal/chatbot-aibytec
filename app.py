@@ -111,12 +111,14 @@ if st.session_state['page'] == 'home':
     with col1:
         if st.button("Fill the Form"):
             st.session_state['page'] = 'form'
-            st.experimental_rerun()  # Ensure the page reloads instantly.
+            # Instead of rerunning the entire app, we transition to the form page
+            st.experimental_rerun() 
 
     with col2:
         if st.button("Chat with AIByTec Bot"):
             st.session_state['page'] = 'chat'
-            st.experimental_rerun()  # Ensure the page reloads instantly.
+            # Transition to the chat page
+            st.experimental_rerun() 
 
 # ----------------------
 # PAGE 2: User Info Form
@@ -191,4 +193,5 @@ elif st.session_state['page'] == 'chat':
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response}) 
-        st.experimental_rerun()  # Ensure the chat responds instantly after input
+        # Keep chat flowing without rerunning the entire app
+        st.experimental_rerun()
