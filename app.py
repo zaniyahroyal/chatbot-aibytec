@@ -152,7 +152,12 @@ if "chat_history" not in st.session_state:
 
 if st.session_state['page'] == 'home':
     st.subheader("Welcome to AIByTec Bot")
-    st.write("AIByTec Bot is your go-to assistant for enhancing your learning and business strategies. Explore our features by selecting an option below.")
+    st.write(
+        """
+        AIByTec Bot is your go-to assistant for enhancing your learning and business strategies. 
+        Explore our features by selecting an option below. **Note:** Buttons may require a double-click to function due to certain browser settings.
+        """
+    )
     st.write("Choose to either fill out your profile or start chatting with our AI-powered bot.")
     
     # Create buttons for the two options
