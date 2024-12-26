@@ -22,14 +22,14 @@ WEBSITE_URL = os.getenv("WEBSITE_URL")
 # Functions
 
 # Function to send email
-def send_email(name, email, contact_no, area_of_interest):
+def send_email(name, email, contact_no, specific_needs_and_challenges):
     subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
     Name: {name}
     Email: {email}
     Contact No.: {contact_no}
-    Area of Interest: {area_of_interest}
+    Specific Needs & Challenges: {specific_needs_and_challenges}
     """
     message = MIMEMultipart()
     message['From'] = SENDER_EMAIL
@@ -92,40 +92,29 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 # Streamlit UI and App Logic
 # ----------------------
 st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
+
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
+
 # ----------------------
 # PAGE 1: User Info Form
 # ----------------------
-
-# Display buttons at the top of the window to either "Complete Your Profile" or "AIBYTEC Bot"
-col1, col2 = st.columns(2)
-
-with col1:
-    go_to_form = st.button("Complete Your Profile")
-with col2:
-    go_to_chat = st.button("AIBYTEC Bot")
-
-if go_to_form:
-    st.session_state['page'] = 'form'
-    st.rerun()
-
-if go_to_chat:
-    st.session_state['page'] = 'chat'
-    st.rerun()
-
-# ----------------------
-# Form Page Logic
-# ----------------------
 if st.session_state['page'] == 'form':
+    # Create buttons at the top for form and chat
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.button("Complete Your Profile", key="profile_button")
+    with col2:
+        st.button("AIByTec Bot", key="chat_button")
+
     with st.form(key="user_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
         contact_no = st.text_input("Contact No.")    
-        specific_needs_&_challenges = st.text_input("Task to be performed")
+        specific_needs_and_challenges = st.text_input("Task to be performed")
         training = st.text_input("Preferred course")
         mode_of_training = st.text_input("Online/Onsite")
         prefered_time_contact_mode = st.text_input("Preferred time/mode of contact")
@@ -134,14 +123,14 @@ if st.session_state['page'] == 'form':
         submitted = st.form_submit_button("Submit Profile")
         
         if submitted:
-            if name and email and contact_no and specific_needs_&_challenges and training and mode_of_training and prefered_time_contact_mode:
-                send_email(name, email, contact_no, specific_needs_&_challenges)
+            if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
+                send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'
                 st.success("Your profile has been submitted!")
                 st.rerun()
             else:
                 st.warning("Please fill out all fields.")
-
+                
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
