@@ -182,15 +182,9 @@ elif st.session_state['page'] == 'chat':
     # Fixed input bar at bottom
     user_input = st.chat_input("Type your question here...", key="user_input_fixed")
     if user_input:
-        # Append user query to chat history
-        st.session_state['chat_history'].append({"user": user_input, "bot": ""})
-
         # Display bot's response
         with st.spinner("Generating response..."):
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-        
-        # Append bot response to chat history separately
-        st.session_state['chat_history'].append({"user": "", "bot": bot_response})
-
-        # Re-run to display updated chat history
+        # Append user query and bot response to chat history
+        st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         st.experimental_rerun()  # Re-run to update chat history
