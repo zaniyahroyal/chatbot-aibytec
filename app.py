@@ -113,7 +113,7 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
             model="gpt-3.5-turbo",
             messages=messages,
             max_tokens=256,
-            temperature=0.7,
+            temperature=0.1,
             stream=False
         )
         return response['choices'][0]['message']['content']
