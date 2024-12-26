@@ -19,87 +19,154 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
 
-# Functions (unchanged)
+# Functions
+
+# Function to send email
+def send_email(name, email, contact_no, area_of_interest):
+    subject = "New User Profile Submission"
+    body = f"""
+    New Student Profile Submitted:
+    Name: {name}
+    Email: {email}
+    Contact No.: {contact_no}
+    Area of Interest: {area_of_interest}
+    """
+    message = MIMEMultipart()
+    message['From'] = SENDER_EMAIL
+    message['To'] = RECEIVER_EMAIL
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message.as_string())
+        server.quit()
+        st.success("Email sent successfully!")
+    except Exception as e:
+        st.error(f"Error sending email: {e}")
+
+# Function to extract PDF text
+def extract_pdf_text(file_path):
+    try:
+        reader = PdfReader(file_path)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        return text
+    except Exception as e:
+        st.error(f"Error reading PDF: {e}")
+        return ""
+
+# Function to scrape website content
+def scrape_website(url):
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        return soup.get_text()
+    except Exception as e:
+        return f"Error scraping website: {e}"
+
+# Function to generate OpenAI response
+def chat_with_ai(user_question, website_text, pdf_text, chat_history):
+    combined_context = f"Website Content:\n{website_text}\n\nPDF Content:\n{pdf_text}"
+    messages = [{"role": "system", "content": "You are a helpful assistant. Use the provided content."}]
+    for entry in chat_history:
+        messages.append({"role": "user", "content": entry['user']})
+        messages.append({"role": "assistant", "content": entry['bot']})
+    messages.append({"role": "user", "content": f"{combined_context}\n\nQuestion: {user_question}"})
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=messages,
+            max_tokens=256,
+            temperature=0.7,
+            stream=False
+        )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        return f"Error generating response: {e}"
 
 # ----------------------
 # Streamlit UI and App Logic
 # ----------------------
-st.set_page_config(page_title="AIBYTEC Chatbot", layout="centered", page_icon=":robot:")
-
+st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
-
 # ----------------------
 # PAGE 1: User Info Form
 # ----------------------
+
+# Display buttons at the top of the window to either "Complete Your Profile" or "AIBYTEC Bot"
+col1, col2 = st.columns(2)
+
+with col1:
+    go_to_form = st.button("Complete Your Profile")
+with col2:
+    go_to_chat = st.button("AIBYTEC Bot")
+
+if go_to_form:
+    st.session_state['page'] = 'form'
+    st.rerun()
+
+if go_to_chat:
+    st.session_state['page'] = 'chat'
+    st.rerun()
+
+# ----------------------
+# Form Page Logic
+# ----------------------
 if st.session_state['page'] == 'form':
-
-    st.markdown("<h2 style='text-align: center;'>Please Provide Your Details</h2>", unsafe_allow_html=True)
     with st.form(key="user_form"):
-        # Simplified and compact input fields
-        col1, col2 = st.columns([3, 1])  # More space for the name, less for the button
-        with col1:
-            name = st.text_input("Name")
-            email = st.text_input("Email")
-            contact_no = st.text_input("Contact No.")
-            specific_needs_and_challenges = st.text_input("Task to be Performed")
-            training = st.text_input("Preferred Course")
-            mode_of_training = st.selectbox("Mode of Training", ["Online", "Onsite"])
-            
-            # Preferred Time/Contact Mode with options for Email and WhatsApp
-            contact_mode = st.radio("Preferred Contact Mode", ["Email", "WhatsApp"])
+        name = st.text_input("Name")
+        email = st.text_input("Email")
+        contact_no = st.text_input("Contact No.")    
+        specific_needs_&_challenges = st.text_input("Task to be performed")
+        training = st.text_input("Preferred course")
+        mode_of_training = st.text_input("Online/Onsite")
+        prefered_time_contact_mode = st.text_input("Preferred time/mode of contact")
 
-            if contact_mode == "Email":
-                preferred_time_contact_mode = st.time_input("Preferred Time (Email)", key="email_time")
-            elif contact_mode == "WhatsApp":
-                preferred_time_contact_mode = st.time_input("Preferred Time (WhatsApp)", key="whatsapp_time")
-
-        with col2:
-            submitted = st.form_submit_button("Proceed to Chat")
-            continue_chat = st.form_submit_button("Skip and Join Chat")
-
-        # Submit button handling
+        # Submit Button for the form
+        submitted = st.form_submit_button("Submit Profile")
+        
         if submitted:
-            if name and email and contact_no:
-                send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, preferred_time_contact_mode)
+            if name and email and contact_no and specific_needs_&_challenges and training and mode_of_training and prefered_time_contact_mode:
+                send_email(name, email, contact_no, specific_needs_&_challenges)
                 st.session_state['page'] = 'chat'
+                st.success("Your profile has been submitted!")
                 st.rerun()
             else:
-                st.warning("Please fill out all required fields.")
-        
-        # Skip to Chatbot
-        if continue_chat:
-            st.session_state['page'] = 'chat'
-            st.rerun()
+                st.warning("Please fill out all fields.")
 
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
+    # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
             "user": "", 
             "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
         })
     
-    # Streamlined chat history display
+    # Display chat history
     for entry in st.session_state['chat_history']:
         if entry['user']:  # Show user messages
             st.markdown(
                 f"""
                 <div style="
-                    background-color: #2C6D9D; 
-                    padding: 8px;
+                    background-color: #439DF6; 
+                    padding: 10px;
                     color: #fff;
-                    border-radius: 12px; 
-                    margin-bottom: 8px;
+                    border-radius: 10px; 
+                    margin-bottom: 10px;
                     width: fit-content;
-                    max-width: 75%;
+                    max-width: 80%;
                     overflow: hidden;
-                    font-family: Arial, sans-serif;
                 ">
                     {entry['user']}
                 </div>
@@ -110,16 +177,15 @@ elif st.session_state['page'] == 'chat':
             st.markdown(
                 f"""
                 <div style="
-                    background-color: #4A4A4A; 
-                    padding: 8px; 
+                    background-color: #4a4a4a; 
+                    padding: 10px; 
                     color: #fff; 
-                    border-radius: 12px; 
-                    margin-bottom: 8px;
+                    border-radius: 10px; 
+                    margin-bottom: 10px;
                     margin-left: auto;
                     width: fit-content;
-                    max-width: 75%;
+                    max-width: 80%;
                     overflow: hidden;
-                    font-family: Arial, sans-serif;
                 ">
                     {entry['bot']}
                 </div>
@@ -132,7 +198,7 @@ elif st.session_state['page'] == 'chat':
     website_text = scrape_website(WEBSITE_URL)
 
     # Fixed input bar at bottom
-    user_input = st.chat_input("Ask me anything...")
+    user_input = st.chat_input("Type your question here...", key="user_input_fixed")
     if user_input:
         # Display bot's response
         with st.spinner("Generating response..."):
