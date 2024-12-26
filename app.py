@@ -114,7 +114,7 @@ if st.session_state['page'] == 'form':
         specific_needs_and_challenges = st.text_input("needs challenges")
         training = st.text_input("Preferred Course")
         mode_of_training = st.radio("Mode of Training", options=["Online", "Onsite"])
-        preferred_time_contact_mode = st.text_input("Preferred Time/Contact Mode")
+        preferred_time_contact_mode = st.text_input("Preferred Time","watsapp", "email")
 
         # Create two columns for buttons
         col1, col2 = st.columns(2)
