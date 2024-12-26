@@ -111,12 +111,14 @@ if st.session_state['page'] == 'home':
     with col1:
         if st.button("Fill the Form"):
             st.session_state['page'] = 'form'
-            st.experimental_rerun()
 
     with col2:
         if st.button("Chat with AIByTec Bot"):
             st.session_state['page'] = 'chat'
-            st.experimental_rerun()
+
+    # Prevent rerun when page changes
+    if st.session_state['page'] != 'home':
+        st.experimental_rerun()
 
 # ----------------------
 # PAGE 2: User Info Form
