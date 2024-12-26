@@ -7,11 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 import openai
 import os
-from dotenv import load_dotenv
+from dotenv import load_doten
 
-# ----------------------
 # Load Environment Variables
-# ----------------------
 load_dotenv()
 
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
@@ -21,16 +19,13 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
 
-# ----------------------
 # Functions
-# ----------------------
 
 # Function to send email
 def send_email(name, email, contact_no, area_of_interest):
     subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
-
     Name: {name}
     Email: {email}
     Contact No.: {contact_no}
@@ -92,19 +87,15 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
         return response['choices'][0]['message']['content']
     except Exception as e:
         return f"Error generating response: {e}"
-
 # ----------------------
 # Streamlit UI and App Logic
 # ----------------------
-
 st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
-
 # Session State Initialization
 if "page" not in st.session_state:
     st.session_state['page'] = 'form'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
-
 # ----------------------
 # PAGE 1: User Info Form
 # ----------------------
@@ -135,7 +126,6 @@ if st.session_state['page'] == 'form':
         if continue_chat:
             st.session_state['page'] = 'chat'
             st.rerun()
-
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
@@ -160,7 +150,6 @@ elif st.session_state['page'] == 'chat':
             """, 
             unsafe_allow_html=True
         )
-
         # Assistant Message
         st.markdown(
             f"""
@@ -180,22 +169,18 @@ elif st.session_state['page'] == 'chat':
             """, 
             unsafe_allow_html=True
         )
-
     # Load PDF and Website content once
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
     website_text = scrape_website(WEBSITE_URL)
 
     # Fixed input bar at bottom
     user_input = st.chat_input("Type your question here...", key="user_input_fixed")
-
     if user_input:
         # Display bot's response
         with st.spinner("Generating response..."):
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-        
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
-        
         # Re-run to display updated chat history
         st.rerun()
 
