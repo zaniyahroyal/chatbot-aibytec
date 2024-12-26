@@ -22,7 +22,7 @@ WEBSITE_URL = os.getenv("WEBSITE_URL")
 # Functions
 
 # Function to send email
-def send_email(name, email, contact_no, specific_needs_and_challenges):
+def send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode):
     subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
@@ -30,6 +30,9 @@ def send_email(name, email, contact_no, specific_needs_and_challenges):
     Email: {email}
     Contact No.: {contact_no}
     Specific Needs & Challenges: {specific_needs_and_challenges}
+    Preferred Course: {training}
+    Mode of Training: {mode_of_training}
+    Preferred Time/Mode of Contact: {prefered_time_contact_mode}
     """
     message = MIMEMultipart()
     message['From'] = SENDER_EMAIL
@@ -136,7 +139,7 @@ elif st.session_state['page'] == 'form':
         
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
-                send_email(name, email, contact_no, specific_needs_and_challenges)
+                send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode)
                 st.session_state['page'] = 'chat'  # After form submission, transition to chat page
                 st.success("Your profile has been submitted!")
             else:
