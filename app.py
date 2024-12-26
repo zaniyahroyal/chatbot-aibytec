@@ -42,6 +42,7 @@ def send_email(name, email, contact_no, specific_needs_and_challenges):
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message.as_string())
         server.quit()
+        st.success("Email sent successfully!")
     except Exception as e:
         st.error(f"Error sending email: {e}")
 
@@ -137,7 +138,7 @@ elif st.session_state['page'] == 'form':
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'
-                # No notifications are shown after form submission
+                st.success("Your profile has been submitted!")
             else:
                 st.warning("Please fill out all fields.")
 
