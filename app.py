@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 import openai
 import os
-from dotenv import load_doten
+from dotenv import load_dotenv
 
 # Load Environment Variables
 load_dotenv()
