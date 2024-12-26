@@ -116,6 +116,10 @@ if st.session_state['page'] == 'home':
         if st.button("Chat with AIByTec Bot"):
             st.session_state['page'] = 'chat'
 
+    # Prevent rerun when page changes
+    if st.session_state['page'] != 'home':
+        st.experimental_rerun()
+
 # ----------------------
 # PAGE 2: User Info Form
 # ----------------------
@@ -139,6 +143,7 @@ elif st.session_state['page'] == 'form':
                 send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'
                 st.success("Your profile has been submitted!")
+                st.experimental_rerun()
             else:
                 st.warning("Please fill out all fields.")
 
@@ -188,3 +193,5 @@ elif st.session_state['page'] == 'chat':
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
+        # Re-run to display updated chat history
+        st.experimental_rerun()
