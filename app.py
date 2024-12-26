@@ -111,7 +111,7 @@ if st.session_state['page'] == 'form':
         name = st.text_input("Name")
         email = st.text_input("Email")
         contact_no = st.text_input("Contact No.")
-        specific_needs_and_challenges = st.text_input("Task to be Performed")
+        specific_needs_and_challenges = st.text_input(needs challenges")
         training = st.text_input("Preferred Course")
         mode_of_training = st.radio("Mode of Training", options=["Online", "Onsite"])
         preferred_time_contact_mode = st.text_input("Preferred Time/Contact Mode")
