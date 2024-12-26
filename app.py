@@ -305,7 +305,7 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 # Streamlit UI and App Logic
 # ----------------------
 
-st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
+st.set_page_config(page_title="Student Profile & AI Chatbot", layout="narrow")
 
 # Session State Initialization
 if "page" not in st.session_state:
