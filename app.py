@@ -158,7 +158,7 @@ if st.session_state['page'] == 'home':
         Explore our features by selecting an option below. **Note:** Buttons may require a double-click to function due to certain browser settings.
         """
     )
-    st.write("Choose to either fill out your profile or start chatting with our AI-powered bot.")
+    st.write("Please choose an option:")
     
     # Create buttons for the two options
     col1, col2 = st.columns([1, 1])
