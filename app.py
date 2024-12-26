@@ -95,20 +95,34 @@ st.set_page_config(page_title="AIBYTEC Chatbot", layout="wide")
 
 # Session State Initialization
 if "page" not in st.session_state:
-    st.session_state['page'] = 'form'
+    st.session_state['page'] = 'home'
 if "chat_history" not in st.session_state:
     st.session_state['chat_history'] = []
 
 # ----------------------
-# PAGE 1: User Info Form
+# PAGE 1: Home Page with Options
 # ----------------------
-if st.session_state['page'] == 'form':
-    # Create buttons at the top for form and chat
-    col1, col2 = st.columns([1, 3])
+if st.session_state['page'] == 'home':
+    st.title("Welcome to AIByTec Bot")
+    st.write("Please choose an option:")
+
+    # Create buttons for the two options
+    col1, col2 = st.columns([1, 1])
     with col1:
-        st.button("Complete Your Profile", key="profile_button")
+        if st.button("Fill the Form"):
+            st.session_state['page'] = 'form'
+            st.experimental_rerun()
+
     with col2:
-        st.button("AIByTec Bot", key="chat_button")
+        if st.button("Chat with AIByTec Bot"):
+            st.session_state['page'] = 'chat'
+            st.experimental_rerun()
+
+# ----------------------
+# PAGE 2: User Info Form
+# ----------------------
+elif st.session_state['page'] == 'form':
+    st.header("Complete Your Profile")
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -127,36 +141,29 @@ if st.session_state['page'] == 'form':
                 send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'
                 st.success("Your profile has been submitted!")
-                st.rerun()
+                st.experimental_rerun()
             else:
                 st.warning("Please fill out all fields.")
-                
+
 # ----------------------
-# PAGE 2: Chatbot Interface
+# PAGE 3: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
+    st.header("Chat with AIByTec Bot")
+
     # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
             "user": "", 
             "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
         })
-    
+
     # Display chat history
     for entry in st.session_state['chat_history']:
         if entry['user']:  # Show user messages
             st.markdown(
                 f"""
-                <div style="
-                    background-color: #439DF6; 
-                    padding: 10px;
-                    color: #fff;
-                    border-radius: 10px; 
-                    margin-bottom: 10px;
-                    width: fit-content;
-                    max-width: 80%;
-                    overflow: hidden;
-                ">
+                <div style="background-color: #439DF6; padding: 10px; color: #fff; border-radius: 10px; margin-bottom: 10px; width: fit-content; max-width: 80%; overflow: hidden;">
                     {entry['user']}
                 </div>
                 """, 
@@ -165,17 +172,7 @@ elif st.session_state['page'] == 'chat':
         if entry['bot']:  # Show bot messages
             st.markdown(
                 f"""
-                <div style="
-                    background-color: #4a4a4a; 
-                    padding: 10px; 
-                    color: #fff; 
-                    border-radius: 10px; 
-                    margin-bottom: 10px;
-                    margin-left: auto;
-                    width: fit-content;
-                    max-width: 80%;
-                    overflow: hidden;
-                ">
+                <div style="background-color: #4a4a4a; padding: 10px; color: #fff; border-radius: 10px; margin-bottom: 10px; margin-left: auto; width: fit-content; max-width: 80%; overflow: hidden;">
                     {entry['bot']}
                 </div>
                 """, 
@@ -195,4 +192,4 @@ elif st.session_state['page'] == 'chat':
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         # Re-run to display updated chat history
-        st.rerun()
+        st.experimental_rerun()
