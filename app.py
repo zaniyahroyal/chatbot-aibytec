@@ -22,7 +22,7 @@ WEBSITE_URL = os.getenv("WEBSITE_URL")
 # Functions
 
 # Function to send email
-def send_email(name, email, contact_no, specific_needs_and_challenges):
+def send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode):
     subject = "New User Profile Submission"
     body = f"""
     New Student Profile Submitted:
@@ -30,6 +30,9 @@ def send_email(name, email, contact_no, specific_needs_and_challenges):
     Email: {email}
     Contact No.: {contact_no}
     Specific Needs & Challenges: {specific_needs_and_challenges}
+    Preferred Course: {training}
+    Mode of Training: {mode_of_training}
+    Preferred Time/Mode of Contact: {prefered_time_contact_mode}
     """
     message = MIMEMultipart()
     message['From'] = SENDER_EMAIL
@@ -108,7 +111,8 @@ if st.session_state['page'] == 'form':
     with col1:
         st.button("Complete Your Profile", key="profile_button")
     with col2:
-        st.button("AIByTec Bot", key="chat_button")
+        st.button("AIByTec Bot", key="chat_button", use_container_width=True, 
+                  help="Click here to chat with our AI assistant", style="background-color: #4CAF50; color: white;")
 
     with st.form(key="user_form"):
         name = st.text_input("Name")
@@ -116,15 +120,17 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")    
         specific_needs_and_challenges = st.text_input("Task to be performed")
         training = st.text_input("Preferred course")
-        mode_of_training = st.text_input("Online/Onsite")
-        prefered_time_contact_mode = st.text_input("Preferred time/mode of contact")
-
+        
+        # Adding options for online/onsite training and preferred time/mode of contact
+        mode_of_training = st.selectbox("Mode of Training", ["Online", "Onsite"])
+        prefered_time_contact_mode = st.selectbox("Preferred Time/Mode of Contact", ["Email", "WhatsApp"])
+        
         # Submit Button for the form
         submitted = st.form_submit_button("Submit Profile")
         
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
-                send_email(name, email, contact_no, specific_needs_and_challenges)
+                send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode)
                 st.session_state['page'] = 'chat'
                 st.success("Your profile has been submitted!")
                 st.rerun()
