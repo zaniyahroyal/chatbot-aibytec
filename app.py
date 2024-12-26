@@ -108,12 +108,12 @@ if st.session_state['page'] == 'home':
     # Create buttons for the two options
     col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("Fill the Form"):
-            st.session_state['page'] = 'form'  # Navigate to the form page
+        if st.button("Fill the Form", key="form_button"):
+            st.session_state['page'] = 'form'
 
     with col2:
-        if st.button("Chat with AIByTec Bot"):
-            st.session_state['page'] = 'chat'  # Navigate to the chatbot page
+        if st.button("Chat with AIByTec Bot", key="chat_button"):
+            st.session_state['page'] = 'chat'
 
 # ----------------------
 # PAGE 2: User Info Form
@@ -136,8 +136,8 @@ elif st.session_state['page'] == 'form':
         if submitted:
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
-                st.session_state['page'] = 'chat'  # After submission, navigate to chatbot
-                st.experimental_rerun()  # Trigger the rerun to load the chatbot page
+                st.session_state['page'] = 'chat'  # Switch to the chat page after form submission
+                # No notifications are shown after form submission
             else:
                 st.warning("Please fill out all fields.")
 
@@ -187,4 +187,3 @@ elif st.session_state['page'] == 'chat':
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
-        st.experimental_rerun()  # Re-run to update chat history
