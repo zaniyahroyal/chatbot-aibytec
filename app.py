@@ -137,11 +137,6 @@ elif st.session_state['page'] == 'form':
             if name and email and contact_no and specific_needs_and_challenges and training and mode_of_training and prefered_time_contact_mode:
                 send_email(name, email, contact_no, specific_needs_and_challenges)
                 st.session_state['page'] = 'chat'  # After submission, navigate to chatbot
-                st.session_state['chat_history'].clear()  # Clear chat history
-                st.session_state['chat_history'].append({
-                    "user": "", 
-                    "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
-                })
                 st.experimental_rerun()  # Trigger the rerun to load the chatbot page
             else:
                 st.warning("Please fill out all fields.")
@@ -151,6 +146,13 @@ elif st.session_state['page'] == 'form':
 # ----------------------
 elif st.session_state['page'] == 'chat':
     st.header("Chat with AIByTec Bot")
+
+    # Initialize chat history with a greeting from the bot
+    if not st.session_state['chat_history']:
+        st.session_state['chat_history'].append({
+            "user": "", 
+            "bot": "Hello! I'm your AI chatbot. How can I assist you today?"
+        })
 
     # Display chat history
     for entry in st.session_state['chat_history']:
@@ -190,5 +192,5 @@ elif st.session_state['page'] == 'chat':
         # Append bot response to chat history separately
         st.session_state['chat_history'].append({"user": "", "bot": bot_response})
 
-        # Directly update chat interface by changing page state
-        st.session_state['page'] = 'chat'
+        # Re-run to display updated chat history
+        st.experimental_rerun()  # Re-run to update chat history
