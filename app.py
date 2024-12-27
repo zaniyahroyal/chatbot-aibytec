@@ -129,9 +129,8 @@ if st.session_state['page'] == 'form':
         contact_no = st.text_input("Contact No.")
         specific_needs_and_challenges = st.text_input("Task to be performed")
         training = st.text_input("Preferred course")
-        mode_of_training = st.radio("Mode of Training", options=["Online", "Onsite"])
-        preferred_time = st.text_input("Preferred Time")
-        contact_mode = st.text_input("Contact Mode")
+        mode_of_training = st.text_input("Online/Onsite")  # Updated field
+        prefered_time_contact_mode = st.text_input("Preferred time/mode of contact")  # Updated field
 
         col1, col2 = st.columns([1, 1])
         with col1:
@@ -146,10 +145,9 @@ if st.session_state['page'] == 'form':
                 st.warning("Please enter a valid email address.")
             elif not is_valid_contact_no(contact_no):
                 st.warning("Please enter a valid contact number (10-15 digits).")
-            elif not specific_needs_and_challenges or not training or not preferred_time or not contact_mode:
+            elif not specific_needs_and_challenges or not training or not mode_of_training or not prefered_time_contact_mode:
                 st.warning("Please fill out all fields.")
             else:
-                prefered_time_contact_mode = f"{preferred_time}, {contact_mode}"
                 send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode)
                 st.session_state['page'] = 'chat'
                 st.rerun()
@@ -157,27 +155,6 @@ if st.session_state['page'] == 'form':
         if continue_chat:
             st.session_state['page'] = 'chat'
             st.rerun()
-
-# # ----------------------
-# # PAGE 2: Chatbot Interface
-# # ----------------------
-# elif st.session_state['page'] == 'chat':
-#     for entry in st.session_state['chat_history']:
-#         st.markdown(f"<div style='background-color: #439DF6; color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; width: fit-content; max-width: 80%;'>{entry['user']}</div>", unsafe_allow_html=True)
-#         st.markdown(f"<div style='background-color: #4a4a4a; color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; margin-left: auto; width: fit-content; max-width: 80%;'>{entry['bot']}</div>", unsafe_allow_html=True)
-
-#     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
-#     website_text = scrape_website(WEBSITE_URL)
-
-#     user_input = st.chat_input("Type your question here...", key="user_input_fixed")
-
-#     if user_input:
-#         with st.spinner("Generating response..."):
-#             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-#         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
-#         st.rerun()
-
-
 
 # ----------------------
 # PAGE 2: Chatbot Interface
