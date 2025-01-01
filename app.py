@@ -340,7 +340,7 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     Use these sources to answer the user's question accurately and concisely.
     """
     messages = [
-        {"role": "system", "content": "You are Aibytech Bot who gave accurate and concise response. Provide precise answers using the provided context."}
+        {"role": "system", "content": "You are Aibytech Bot. Provide precise answers using the provided context."}
     ] 
 
     for entry in chat_history[-5:]:
