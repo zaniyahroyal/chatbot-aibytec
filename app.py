@@ -1,3 +1,4 @@
+
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -15,6 +16,9 @@ import re  # For validation
 # ----------------------
 load_dotenv()
 
+# SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+# SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
+# RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
@@ -118,8 +122,7 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     ] 
 
     for entry in chat_history[-5:]:
-        if "user" in entry:
-            messages.append({"role": "user", "content": entry['user']})
+        messages.append({"role": "user", "content": entry['user']})
         messages.append({"role": "assistant", "content": entry['bot']})
 
     messages.append({"role": "user", "content": f"{combined_context}\n\nQuestion: {user_question}"})
@@ -191,12 +194,13 @@ elif st.session_state['page'] == 'chat':
     # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
+            "user": "", 
             "bot": "Hello! I'm your AIByTec chatbot. How can I assist you today?"
         })
     
     # Display chat history
     for entry in st.session_state['chat_history']:
-        if "user" in entry:  # Show user messages
+        if entry['user']:  # Show user messages
             st.markdown(
                 f"""
                 <div style="
