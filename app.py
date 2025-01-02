@@ -242,12 +242,16 @@ import re  # For validation
 # ----------------------
 load_dotenv()
 
-SENDER_EMAIL = os.getenv("SENDER_EMAIL")
-SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
-RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
+# SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+# SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
+# RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
+
+SENDER_EMAIL = "info.aibytech@gmail.com"
+SENDER_PASSWORD = "orkz uumf fagk uipc"
+RECEIVER_EMAIL = "info.aibytech@gmail.com"
 
 # ----------------------
 # Functions
