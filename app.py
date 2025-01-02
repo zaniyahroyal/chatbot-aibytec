@@ -183,84 +183,42 @@ if st.session_state['page'] == 'form':
             st.session_state['page'] = 'chat'
             st.rerun()
 
-# # ----------------------
-# # PAGE 2: Chatbot Interface
-# # ----------------------
-# elif st.session_state['page'] == 'chat':
-#     # Initialize chat history with a greeting from the bot
-#     if not st.session_state['chat_history']:
-#         st.session_state['chat_history'].append({
-#             "bot": "Hello! I'm your AIByTec chatbot. How can I assist you today?"
-#         })
-    
-#     # Display chat history
-#     for entry in st.session_state['chat_history']:
-#         # User Message
-#         iconuser = "👤"
-#         st.markdown(
-#             f"""
-#             <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
-#                 <div style='display: flex; align-items: center; max-width: 70%; 
-#                             background-color: #439DF6; color: rgb(255, 255, 255); 
-#                             padding: 10px; border-radius: 10px;'>
-#                     <span>{entry['user']}</span>
-#                     <span style='margin-left: 10px;'>{iconuser}</span>  <!-- Icon -->
-#                 </div>
-#             </div>
-#             """,
-#             unsafe_allow_html=True
-#         )
-
-#         # Assistant Message
-#         iconbot = "🤖"
-#         st.markdown(
-#             f"""
-#             <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
-#                 <div style='display: flex; align-items: center; max-width: 70%; 
-#                             background-color: #4a4a4a; color: rgb(255, 255, 255); 
-#                             padding: 10px; border-radius: 10px;'>
-#                     <span style='margin-right: 10px;'>{iconbot}</span>  <!-- Icon -->
-#                     <span>{entry['bot']}</span>
-#                 </div>
-#             </div>
-#             """,
-#             unsafe_allow_html=True
-#         )
-    
-#     # Load PDF and Website content once
-#     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
-#     website_text = scrape_website(WEBSITE_URL)
-
-#     # Fixed input bar at bottom
-#     user_input = st.chat_input("Type your question here...", key="user_input_fixed")
-#     if user_input:
-#         # Display bot's response
-#         with st.spinner("Generating response..."):
-#             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-#         # Append user query and bot response to chat history
-#         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
-#         # Re-run to display updated chat history
-#         st.rerun()
-
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    # Initialize chat history with only the bot's greeting
+    # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
+            "user": "", 
             "bot": "Hello! I'm your AIByTec chatbot. How can I assist you today?"
         })
     
     # Display chat history
     for entry in st.session_state['chat_history']:
+        # User Message
+        iconuser = "👤"
+        st.markdown(
+            f"""
+            <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #439DF6; color: rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span>{entry['user']}</span>
+                    <span style='margin-left: 10px;'>{iconuser}</span>  <!-- Icon -->
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         # Assistant Message
         iconbot = "🤖"
         st.markdown(
             f"""
             <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
                 <div style='display: flex; align-items: center; max-width: 70%; 
-                            background-color: #A9A9A9; color: rgb(255, 255, 255); 
+                            background-color: #4a4a4a; color: rgb(255, 255, 255); 
                             padding: 10px; border-radius: 10px;'>
                     <span style='margin-right: 10px;'>{iconbot}</span>  <!-- Icon -->
                     <span>{entry['bot']}</span>
