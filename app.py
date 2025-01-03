@@ -278,6 +278,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
 
+# SENDER_EMAIL = "info.aibytech@gmail.com"
+# SENDER_PASSWORD = "orkz uumf fagk uipc"
+# RECEIVER_EMAIL = "info.aibytech@gmail.com"
+
 # ----------------------
 # Functions
 # ----------------------
@@ -431,6 +435,16 @@ if st.session_state['page'] == 'form':
                 st.warning("Please fill out all fields.")
             else:
                 send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode)
+                # Save profile data in session state to make it permanent across sessions
+                st.session_state['profile'] = {
+                    "name": name,
+                    "email": email,
+                    "contact_no": contact_no,
+                    "specific_needs_and_challenges": specific_needs_and_challenges,
+                    "training": training,
+                    "mode_of_training": mode_of_training,
+                    "prefered_time_contact_mode": prefered_time_contact_mode
+                }
                 st.session_state['page'] = 'chat'
                 st.rerun()
         
@@ -442,6 +456,11 @@ if st.session_state['page'] == 'form':
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
+    # Display the profile info if available
+    profile = st.session_state.get('profile')
+    if profile:
+        st.subheader(f"Welcome back, {profile['name']}!")
+
     # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
@@ -503,5 +522,6 @@ elif st.session_state['page'] == 'chat':
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         # Re-run to display updated chat history
         st.rerun()
+
 
 
