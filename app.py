@@ -278,10 +278,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 PDF_PATH = os.getenv("PDF_PATH")
 WEBSITE_URL = os.getenv("WEBSITE_URL")
 
-# SENDER_EMAIL = "info.aibytech@gmail.com"
-# SENDER_PASSWORD = "orkz uumf fagk uipc"
-# RECEIVER_EMAIL = "info.aibytech@gmail.com"
-
 # ----------------------
 # Functions
 # ----------------------
@@ -407,6 +403,11 @@ if "chat_history" not in st.session_state:
 # PAGE 1: User Info Form
 # ----------------------
 if st.session_state['page'] == 'form':
+    # Check if profile is already saved
+    if 'profile' in st.session_state:
+        st.session_state['page'] = 'chat'
+        st.experimental_rerun()
+
     st.subheader("Complete Your Profile")
     
     with st.form(key="user_form"):
@@ -446,21 +447,21 @@ if st.session_state['page'] == 'form':
                     "prefered_time_contact_mode": prefered_time_contact_mode
                 }
                 st.session_state['page'] = 'chat'
-                st.rerun()
-        
+                st.experimental_rerun()
+
         if continue_chat:
             st.session_state['page'] = 'chat'
-            st.rerun()
+            st.experimental_rerun()
 
 # ----------------------
 # PAGE 2: Chatbot Interface
 # ----------------------
 elif st.session_state['page'] == 'chat':
-    # Display the profile info if available
+    # Display greeting message with the name
     profile = st.session_state.get('profile')
     if profile:
         st.subheader(f"Welcome back, {profile['name']}!")
-
+    
     # Initialize chat history with a greeting from the bot
     if not st.session_state['chat_history']:
         st.session_state['chat_history'].append({
@@ -521,7 +522,7 @@ elif st.session_state['page'] == 'chat':
         # Append user query and bot response to chat history
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         # Re-run to display updated chat history
-        st.rerun()
+        st.experimental_rerun()
 
 
 
