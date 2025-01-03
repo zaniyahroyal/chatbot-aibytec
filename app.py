@@ -245,7 +245,6 @@
 
 
 
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -339,7 +338,7 @@ def summarize_text(text):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
+            messages=[ 
                 {"role": "system", "content": "Summarize the following text for clarity and conciseness."},
                 {"role": "user", "content": text}
             ],
@@ -361,8 +360,8 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     Use these sources to answer the user's question accurately and concisely.
     """
     messages = [
-        {"role": "system", "content": "As an Aibytec chatbot, you are responsible for guiding the user through Aibytec’s services. Your tone should be conversational yet professional, offering easy-to-understand explanations."}
-    ]
+        {"role": "system", "content": "As an Aibytec chatbot, you are responsible for guiding the user through Aibytec’s services. You should offer assistance on training and AI service inquiries. The chatbot must be knowledgeable about AI-powered solutions, including Machine Learning (ML), Natural Language Processing (NLP), AI data analytics, web development, and Generative AI. Your tone should be conversational yet professional, offering easy-to-understand explanations and recommending tailored solutions to the user’s business needs or educational requirements."}
+    ] 
 
     for entry in chat_history[-5:]:
         messages.append({"role": "user", "content": entry['user']})
@@ -441,20 +440,18 @@ elif st.session_state['page'] == 'chat':
             "bot": "Hello! I'm your AIByTec chatbot. How can I assist you today?"
         })
     
-    # Display chat history
+    # Display chat history with icons
     for entry in st.session_state['chat_history']:
         if entry['user']:  # Show user messages
             st.markdown(
                 f"""
-                <div style='display: flex; justify-content: flex-end; margin-bottom: 10px;'>
-                    <div style='display: flex; align-items: center; gap: 10px;'>
-                        <div style='color: #439DF6;'>👤</div>
-                        <div style='max-width: 70%; 
-                                    background-color: #439DF6; color: #fff; 
-                                    padding: 10px; border-radius: 10px;'>
-                            {entry['user']}
-                        </div>
-                    </div>
+                </div>
+                <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color:#439DF6; color:rgb(255, 255, 255); 
+                            padding: 5px 10px; border-radius: 10px;'>
+                    <span>👤 {entry['user']}</span>  <!-- Add user icon here -->
+                </div>
                 </div>
                 """, 
                 unsafe_allow_html=True
@@ -462,15 +459,13 @@ elif st.session_state['page'] == 'chat':
         if entry['bot']:  # Show bot messages
             st.markdown(
                 f"""
-                <div style='display: flex; justify-content: flex-start; margin-bottom: 10px;'>
-                    <div style='display: flex; align-items: center; gap: 10px;'>
-                        <div style='color: #4a4a4a;'>🤖</div>
-                        <div style='max-width: 70%; 
-                                    background-color: #4a4a4a; color: #fff; 
-                                    padding: 10px; border-radius: 10px;'>
-                            {entry['bot']}
-                        </div>
-                    </div>
+                </div>
+                <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #4a4a4a; color:rgb(255, 255, 255); 
+                            padding: 5px 10px; border-radius: 10px;'>
+                    <span>🤖 {entry['bot']}</span>  <!-- Add bot icon here -->
+                </div>
                 </div>
                 """, 
                 unsafe_allow_html=True
@@ -490,8 +485,6 @@ elif st.session_state['page'] == 'chat':
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         # Re-run to display updated chat history
         st.rerun()
-
-
 
 
 
