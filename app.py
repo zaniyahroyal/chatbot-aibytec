@@ -430,32 +430,20 @@ if st.session_state['page'] == 'form':
             st.rerun()
 
 elif st.session_state['page'] == 'chat':
-    if not st.session_state['chat_history']:
-        st.session_state['chat_history'].append({
-            "user": "", 
-            "bot": "Hello! I'm your AIByTec chatbot. How can I assist you today?"
-        })
-    
+    pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
+    website_text = scrape_website(WEBSITE_URL)
+
+    user_input = st.chat_input("Type your question here...", key="user_input_fixed")
+    if user_input:
+        st.session_state['chat_history'].append({"user": user_input, "bot": ""})
+        with st.spinner("Generating response..."):
+            bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
+        st.session_state['chat_history'][-1]['bot'] = bot_response
+        st.rerun()
+
     for entry in st.session_state['chat_history']:
-        if entry['bot']:
-            # Assistant Message
-            iconbot = "🤖"
-            st.markdown(
-                f"""
-                <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
-                <div style='display: flex; align-items: center; max-width: 70%; 
-                            background-color: #A9A9A9; color:rgb(255, 255, 255); 
-                            padding: 10px; border-radius: 10px;'>
-                    <span style='margin-right: 10px;'>{iconbot}</span>
-                    <span>{entry['bot']}</span>
-                </div>
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
         if entry['user']:
             # User Message
-            iconuser = "👤"
             st.markdown(
                 f"""
                 <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
@@ -468,6 +456,22 @@ elif st.session_state['page'] == 'chat':
                 """, 
                 unsafe_allow_html=True
             )
+        if entry['bot']:
+            # Assistant Message
+            st.markdown(
+                f"""
+                <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #A9A9A9; color:rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span>🤖</span>
+                    <span>{entry['bot']}</span>
+                </div>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+
     
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
     website_text = scrape_website(WEBSITE_URL)
