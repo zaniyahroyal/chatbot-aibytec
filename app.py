@@ -437,37 +437,37 @@ elif st.session_state['page'] == 'chat':
         })
     
     for entry in st.session_state['chat_history']:
-        # User Message
-        iconuser = "👤"
-        iconbot = "🤖"
-        st.markdown(
-            f"""
-            <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
-            <div style='display: flex; align-items: center; max-width: 70%; 
-                        background-color: #78bae4; color:rgb(255, 255, 255); 
-                        padding: 10px; border-radius: 10px;'>
-                <span>{entry['user']}</span>
-                <span style='margin-left: 10px;'>{iconuser}</span>
-            </div>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
-
-        # Assistant Message
-        st.markdown(
-            f"""
-            <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
-            <div style='display: flex; align-items: center; max-width: 70%; 
-                        background-color: #A9A9A9; color:rgb(255, 255, 255); 
-                        padding: 10px; border-radius: 10px;'>
-                <span style='margin-right: 10px;'>{iconbot}</span>
-                <span>{entry['bot']}</span>
-            </div>
-            </div>
-            """, 
-            unsafe_allow_html=True
-        )
+        if entry['bot']:
+            # Assistant Message
+            iconbot = "🤖"
+            st.markdown(
+                f"""
+                <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #A9A9A9; color:rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span style='margin-right: 10px;'>{iconbot}</span>
+                    <span>{entry['bot']}</span>
+                </div>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+        if entry['user']:
+            # User Message
+            iconuser = "👤"
+            st.markdown(
+                f"""
+                <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #78bae4; color:rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span>{entry['user']}</span>
+                </div>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
     
     pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
     website_text = scrape_website(WEBSITE_URL)
@@ -478,4 +478,5 @@ elif st.session_state['page'] == 'chat':
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         st.rerun()
+
 
