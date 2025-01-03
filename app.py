@@ -202,17 +202,13 @@ elif st.session_state['page'] == 'chat':
         if entry['user']:  # Show user messages
             st.markdown(
                 f"""
-                <div style="
-                    background-color: #439DF6; 
-                    padding: 10px;
-                    color: #fff;
-                    border-radius: 10px; 
-                    margin-bottom: 10px;
-                    width: fit-content;
-                    max-width: 80%;
-                    overflow: hidden;
-                ">
-                    {entry['user']}
+                </div>
+                <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color:#439DF6; color:rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span>{entry['user']}</span>
+                </div>
                 </div>
                 """, 
                 unsafe_allow_html=True
@@ -220,18 +216,13 @@ elif st.session_state['page'] == 'chat':
         if entry['bot']:  # Show bot messages
             st.markdown(
                 f"""
-                <div style="
-                    background-color: #4a4a4a; 
-                    padding: 10px; 
-                    color: #fff; 
-                    border-radius: 10px; 
-                    margin-bottom: 10px;
-                    margin-left: auto;
-                    width: fit-content;
-                    max-width: 80%;
-                    overflow: hidden;
-                ">
-                    {entry['bot']}
+                </div>
+                <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; max-width: 70%; 
+                            background-color: #4a4a4a;; color:rgb(255, 255, 255); 
+                            padding: 10px; border-radius: 10px;'>
+                    <span>{entry['bot']}</span>
+                </div>
                 </div>
                 """, 
                 unsafe_allow_html=True
