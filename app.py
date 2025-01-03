@@ -220,7 +220,7 @@ elif st.session_state['page'] == 'chat':
                 <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
                 <div style='display: flex; align-items: center; max-width: 70%; 
                             background-color: #4a4a4a;; color:rgb(255, 255, 255); 
-                            padding: 10px; border-radius: 10px;'>
+                            padding: 5px 10px; border-radius: 10px;'>
                     <span>{entry['bot']}</span>
                 </div>
                 </div>
