@@ -256,37 +256,81 @@
 
 
 
-import os
+import streamlit as st
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from PyPDF2 import PdfReader
 import requests
 from bs4 import BeautifulSoup
-import streamlit as st
 import openai
+import os
+from dotenv import load_dotenv
+import re  # For validation
 
-# Constants
-PDF_PATH = "path/to/your/pdf.pdf"  # Replace with your actual PDF file path
-WEBSITE_URL = "https://example.com"  # Replace with the target website URL
+# ----------------------
+# Load Environment Variables
+# ----------------------
+load_dotenv()
+
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
+RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 openai.api_key = os.getenv("OPENAI_API_KEY")
+PDF_PATH = os.getenv("PDF_PATH")
+WEBSITE_URL = os.getenv("WEBSITE_URL")
 
-# Helper Functions
+# ----------------------
+# Functions
+# ----------------------
+
 def is_valid_name(name):
-    return bool(name.strip())
+    return len(name.strip()) > 0
 
 def is_valid_email(email):
-    return "@" in email and "." in email
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 def is_valid_contact_no(contact_no):
-    return contact_no.isdigit() and 10 <= len(contact_no) <= 15
+    return re.match(r"^\+?\d{10,15}$", contact_no)
 
-def send_email(name, email, contact_no, task, training, mode_of_training, contact_time):
-    # Placeholder for email functionality
-    print("Email sent to:", email)
+def send_email(name, email, contact_no, specific_needs_and_challenges, training, mode_of_training, prefered_time_contact_mode):
+    subject = "New User Profile Submission"
+    body = f"""
+    New Student Profile Submitted:
 
-def extract_pdf_text(pdf_path):
+    Name: {name}
+    Email: {email}
+    Contact No.: {contact_no}
+    Task to be Performed: {specific_needs_and_challenges}
+    Preferred Course: {training}
+    Mode of Training: {mode_of_training}
+    Preferred Time/Mode of Contact: {prefered_time_contact_mode}
+    """
+    message = MIMEMultipart()
+    message['From'] = SENDER_EMAIL
+    message['To'] = RECEIVER_EMAIL
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
     try:
-        with open(pdf_path, "rb") as file:
-            return file.read().decode("utf-8")
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message.as_string())
+        server.quit()
+        st.success("Email sent successfully!")
     except Exception as e:
-        return f"Error reading PDF: {e}"
+        st.error(f"Error sending email: {e}")
+
+def extract_pdf_text(file_path):
+    try:
+        reader = PdfReader(file_path)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        return text
+    except Exception as e:
+        st.error(f"Error reading PDF: {e}")
+        return ""
 
 def scrape_website(url):
     try:
@@ -337,7 +381,10 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     except Exception as e:
         return f"Error generating response: {e}"
 
-# Streamlit UI and Logic
+# ----------------------
+# Streamlit UI and App Logic
+# ----------------------
+
 st.set_page_config(page_title="Student Profile & AI Chatbot", layout="wide")
 
 if "page" not in st.session_state:
@@ -395,6 +442,7 @@ elif st.session_state['page'] == 'chat':
 
     for entry in st.session_state['chat_history']:
         if entry['user']:
+            # User Message
             st.markdown(
                 f"""
                 <div style='display: flex; justify-content: right; margin-bottom: 10px;'>
@@ -408,6 +456,7 @@ elif st.session_state['page'] == 'chat':
                 unsafe_allow_html=True
             )
         if entry['bot']:
+            # Assistant Message
             st.markdown(
                 f"""
                 <div style='display: flex; justify-content: left; margin-bottom: 10px;'>
@@ -421,3 +470,4 @@ elif st.session_state['page'] == 'chat':
                 """, 
                 unsafe_allow_html=True
             )
+
